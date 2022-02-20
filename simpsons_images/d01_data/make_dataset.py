@@ -4,18 +4,28 @@ import logging
 from pathlib import Path
 from dotenv import find_dotenv, load_dotenv
 from os.path import exists
+import pandas as pd
+import os
+import tensorflow as tf
+from tensorflow.keras.preprocessing.image import ImageDataGenerator
 
 
-
-def create_datasets(traindir, testdir, testlabels):
+def create_datasets(traindir, testdir, test_labels):
     """
     Creates test, train and validation datasets from image directories and will
     generate a csv file with the test labels based on the test image filenames.
 
     Requires input of directory path to the train and test datasets as well as
     the path to a csv file for the test image labels.
+
+    Returns the following:
+    datagen: ImageDataGenerator instance to be used for train and validation datasets
+    datagen_test: ImageDataGenerator instance for test dataset
+    train: training dataset
+    validation: validation dataset
+    test: test dataset
     """
-    file_exists = exists(testlabels)
+    file_exists = exists(test_labels)
 
     if file_exists == False:
         testfiles = pd.DataFrame(os.listdir(testdir),columns=['filename'])
@@ -25,6 +35,9 @@ def create_datasets(traindir, testdir, testlabels):
         test_data_files = pd.concat(data, axis=1)
         test_data_files = test_data_files.drop(columns=[1,2])
         test_data_files.rename(columns={'filename':'filename', 0:'label'}, inplace=True)
+        test_data_files.to_csv(test_labels, index=False)
+    else:
+        test_data_files = pd.read_csv(test_labels)
 
     datagen = ImageDataGenerator(rescale=1./255,
                                    validation_split=0.2,

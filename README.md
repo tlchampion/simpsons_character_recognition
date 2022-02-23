@@ -1,19 +1,27 @@
 simpsons_images
 ==============================
 
-Identify Simpsons character in image file
+Purpose
+====================
+Build a series of CNN models to identify the main Simpsons character in an image file.
+The following models will be built:
+1. Model with no hyperparameter tuning
+2. Model with no hyperparameter tuning, but utilizing a callback to adjust the LR
+3. Model with hyperparameter tuning
+4. Model using transfer learning, leveraging a prebuilt CNN model from TensorFlow Hub
+5. Model using transfer learning and fine tuning the final layers
 
 Project Organization
 ----
 
 	├── LICENSE
 	├── Makefile           			<- Makefile with commands like `make data` or `make train`
-	├── README.md         	 		<- The top-level README for developers using this project.
+	├── README.md         	 		<- This file
 	├── data
-	│   ├── 01_raw         			<- The original, immutable data dump.
-	│   ├── 02_interim     			<- Intermediate data that has been transformed.
-	│   └── 03_processed   			<- The final, canonical data sets for modeling.
-	│
+	│   └── images
+	|    		├── simspons_dataset	<- Contains set of subfolders with image files for training			
+	│				└── simpsons_testset	<- Contains set of images for testing
+	|
 	├── docs               			<- Documentation
 	│
 	├── models             			<- Trained and serialized models, model predictions, or model summaries
@@ -55,5 +63,3 @@ Project Organization
 
 
 ----
-
-<p><small>Project based on the <a target="_blank" href="https://drivendata.github.io/cookiecutter-data-science/">cookiecutter data science project template</a>. #cookiecutterdatascience</small></p>

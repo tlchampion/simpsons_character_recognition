@@ -8,6 +8,16 @@ import pandas as pd
 import os
 import tensorflow as tf
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
+import splitfolders
+
+
+def split_image_folders(input, output):
+    if os.path.isdir(output):
+        print("Directory already exists.")
+    else:
+
+        splitfolders.fixed(input, output, seed=42, fixed=(
+            3000, 2000), oversampling=True, move=False)
 
 
 def create_datasets(traindir, testdir, test_labels):
@@ -28,42 +38,43 @@ def create_datasets(traindir, testdir, test_labels):
     file_exists = exists(test_labels)
 
     if file_exists == False:
-        testfiles = pd.DataFrame(os.listdir(testdir),columns=['filename'])
+        testfiles = pd.DataFrame(os.listdir(testdir), columns=['filename'])
         testlabels = testfiles['filename'].str.split(".", expand=True)
         testlabels = testlabels[0].str.rpartition('_', expand=True)
         data = [testfiles, testlabels]
         test_data_files = pd.concat(data, axis=1)
-        test_data_files = test_data_files.drop(columns=[1,2])
-        test_data_files.rename(columns={'filename':'filename', 0:'label'}, inplace=True)
+        test_data_files = test_data_files.drop(columns=[1, 2])
+        test_data_files.rename(
+            columns={'filename': 'filename', 0: 'label'}, inplace=True)
         test_data_files.to_csv(test_labels, index=False)
     else:
         test_data_files = pd.read_csv(test_labels)
 
     datagen = ImageDataGenerator(rescale=1./255,
-                                   validation_split=0.2,
-                                   horizontal_flip=True,
-                                   vertical_flip=True)
+                                 validation_split=0.2,
+                                 horizontal_flip=True,
+                                 vertical_flip=True)
 
     datagen_test = ImageDataGenerator(rescale=1./255,
-                                   validation_split=0.2,
-                                   horizontal_flip=False,
-                                   vertical_flip=False)
+                                      validation_split=0.2,
+                                      horizontal_flip=False,
+                                      vertical_flip=False)
 
     train = datagen.flow_from_directory(directory=traindir,
-                                    batch_size=32,
-                                    target_size=(224,224),
-                                    class_mode='categorical',
-                                    subset='training',
-                                    seed=42,
-                                    shuffle=True)
+                                        batch_size=32,
+                                        target_size=(224, 224),
+                                        class_mode='categorical',
+                                        subset='training',
+                                        seed=42,
+                                        shuffle=True)
 
     validation = datagen.flow_from_directory(directory=traindir,
-                                    batch_size=32,
-                                    target_size=(224,224),
-                                    class_mode='categorical',
-                                    subset='validation',
-                                    seed=42,
-                                    shuffle=True)
+                                             batch_size=32,
+                                             target_size=(224, 224),
+                                             class_mode='categorical',
+                                             subset='validation',
+                                             seed=42,
+                                             shuffle=True)
 
     test = datagen_test.flow_from_dataframe(
         dataframe=test_data_files,
@@ -76,12 +87,7 @@ def create_datasets(traindir, testdir, test_labels):
         shuffle=False
     )
 
-
     return datagen, datagen_test, train, validation, test
-
-
-
-
 
 
 if __name__ == '__main__':

@@ -16,8 +16,8 @@ def split_image_folders(input, output):
         print("Directory already exists.")
     else:
 
-        splitfolders.fixed(input, output, seed=42, fixed=(
-            3000, 2000), oversample=True, move=False)
+        splitfolders.ratio(input, output, seed=42, ratio=(
+            .75, .15, .10), move=False)
 
 
 def create_datasets(traindir, testdir, test_labels):

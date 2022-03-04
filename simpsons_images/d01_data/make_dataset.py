@@ -15,6 +15,7 @@ def split_image_folders(input, output):
     if os.path.isdir(output):
         print("Directory already exists.")
     else:
+        print("Creating new folders and splitting images into 3 datasets")
 
         splitfolders.ratio(input, output, seed=42, ratio=(
             .75, .15, .10), move=False)

@@ -17,7 +17,7 @@ def split_image_folders(input, output):
     else:
 
         splitfolders.fixed(input, output, seed=42, fixed=(
-            3000, 2000), oversampling=True, move=False)
+            3000, 2000), oversample=True, move=False)
 
 
 def create_datasets(traindir, testdir, test_labels):

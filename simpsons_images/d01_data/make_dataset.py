@@ -38,6 +38,21 @@ def create_datasets(traindir, valdir, testdir):
 
     """
 
+    file_exists = exists(test_labels)
+
+    if file_exists == False:
+        testfiles = pd.DataFrame(os.listdir(testdir), columns=['filename'])
+        testlabels = testfiles['filename'].str.split(".", expand=True)
+        testlabels = testlabels[0].str.rpartition('_', expand=True)
+        data = [testfiles, testlabels]
+        test_data_files = pd.concat(data, axis=1)
+        test_data_files = test_data_files.drop(columns=[1, 2])
+        test_data_files.rename(
+            columns={'filename': 'filename', 0: 'label'}, inplace=True)
+        test_data_files.to_csv(test_labels, index=False)
+    else:
+        test_data_files = pd.read_csv(test_labels)
+
     datagen = ImageDataGenerator(rescale=1./255,
                                  validation_split=0.2,
                                  horizontal_flip=True,

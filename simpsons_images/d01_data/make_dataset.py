@@ -35,6 +35,7 @@ def create_datasets(traindir, valdir, testdir):
     train: training dataset
     validation: validation dataset
     test: test dataset
+
     """
 
     datagen = ImageDataGenerator(rescale=1./255,

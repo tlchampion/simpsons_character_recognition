@@ -21,7 +21,7 @@ def split_image_folders(input, output):
             .75, .15, .10), move=False)
 
 
-def create_datasets(traindir, valdir, testdir):
+def create_datasets(traindir, testdir, test_labels):
     """
     Creates test, train and validation datasets from image directories and will
     generate a csv file with the test labels based on the test image filenames.
